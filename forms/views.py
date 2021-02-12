@@ -3,8 +3,13 @@ from .models import Questions,Choices
 from .serializer import ChoiceSrializer,QusetionSerializer
 from rest_framework import viewsets, mixins,serializers
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
 def FeedbackView(request):
+    print(request.POST)
     if request.method=='POST':
+        print(request.POST)
         print('this post',request.POST)
     if request.method=='GET':
         questions=Questions.objects.all()

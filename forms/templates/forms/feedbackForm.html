@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <style>
         body{
             background-color: #f0ebf8;
@@ -178,7 +179,7 @@
 
 
          <div class="row" style="margin: 20px 0px;">
-            <button type="submit" onclick="FormSubmit()" class="btn btn-primary">submit</button>
+            <button type="button" onclick="FormSubmit()"  class="btn btn-primary">submit</button>
          </div>
         </form>
     </div>
@@ -201,14 +202,14 @@
         console.log(answer_list);
             
     }
-    function FormSubmit(){
+     function FormSubmit(){
         console.log('hello')
         var URL="{% url 'FeedbackView' %}"
-        function FeedbackView(){
-            var data = {'answers': answer_list, 'X-csrfmiddlewaretoken': csrfmiddlewaretoken};
+            var data = {'answers': answer_list};
+            console.log(data);
             $.post(URL, data);
 
-        }
+
     }
 </script>
 
