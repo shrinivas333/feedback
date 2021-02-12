@@ -20,3 +20,10 @@ class QuestionsViewSet(viewsets.ModelViewSet):
         print(request.data)
         question=Questions.saveQusetions(self,request.data)
         return question
+
+def Unread(request):
+   c=request.POST
+   print("hello")
+   print("count status ",c)
+   questions=Questions.objects.all()
+   return render(request,'forms/feedbackForm.html',{'questions':questions})
