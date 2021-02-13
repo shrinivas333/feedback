@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import json
 # Create your models here.
 
 class Choices(models.Model):
@@ -58,8 +59,19 @@ class Questions(models.Model):
 class Answers(models.Model):
     answer_id=models.AutoField(primary_key=True)
     description=models.CharField(max_length=300,null=True)
-    question_id=models.ForeignKey(Questions,default=None,null=True, on_delete=models.SET_NULL)
+    question=models.ForeignKey(Questions,default=None,null=True, on_delete=models.SET_NULL)
     user=models.ForeignKey(User,default=None,null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.description
+    
+    @staticmethod
+    def addAnswers(data):
+        
+        for i in data:
+            print(data[i])
+            answer=Answers()
+            answer.question=Questions.objects.get(pk=data[i])
+            answer.description=data[i]
+            answer.save()
+            
