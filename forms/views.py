@@ -4,10 +4,15 @@ from .serializer import ChoiceSrializer,QusetionSerializer
 from rest_framework import viewsets, mixins,serializers
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
-
+import json
 @csrf_exempt
 def FeedbackView(request):
     print(request.POST)
+
+    answers=json.loads(request.body)
+    answers=answers['answers']
+    for i in answers:
+        print(i['answer'])
     if request.method=='POST':
         print(request.POST)
         print('this post',request.POST)

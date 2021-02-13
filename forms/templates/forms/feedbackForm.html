@@ -207,7 +207,7 @@
         var URL="{% url 'FeedbackView' %}"
             var data = {'answers': answer_list};
             console.log(data);
-            $.post(URL, data);
+            $.post(URL, JSON.stringify(data));
 
 
     }
