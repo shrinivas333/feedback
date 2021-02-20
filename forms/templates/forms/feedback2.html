@@ -10,7 +10,7 @@
 
     <style>
         body{
-            background-color: #f0ebf8;
+            background-color:#3b325f08;
             font-family: 'Poppins';
         }
         .container1 {
@@ -20,21 +20,21 @@
             background-color: white;
             padding: 10px 20px;
             border-radius: 10px;
+            border: 1px solid #AFF2F9;
+            box-shadow:0px 0px 5px 1px #3b325f40;
         }
-        input[type="text"],
-            select.form-control {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #bebdbd;
-            -webkit-box-shadow: none;
-            box-shadow: none;
-            border-radius: 0;
+        
+        input[type="text" i] {
+        padding: 0px;   
         }
-
-        input[type="text"]:focus,
-            select.form-control:focus {
-            -webkit-box-shadow: none;
-            box-shadow: none;
+                
+         input {
+             outline: 0;
+             border-width: 0 0 2px;
+            border-color:#bebdbd; 
+        }
+        input:focus {
+        border-color: #bebdbd
         }
         .form-check {
             margin: 10px 15px;
@@ -53,6 +53,9 @@
         }
         label{
             color: #3B325F;
+        }
+        p{
+            font-weight: 500;
         }
 
     @media screen and ( max-width: 700px) {
@@ -80,22 +83,33 @@
 <body>
     
     <div class="container1">
-        <div class="row card" style="border-top: 10px solid rgb(103, 58, 183);margin-top: 15px;padding-top: 20px;">
+        <div class="row card" style="margin-top: 15px;padding-top: 20px;">
             
                 <h1 style="font-size: 36px;color: #3B325F;font-weight: 400;">Feedback Survey</h1>
                 <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">Thank you for using GoldLane. We are committed in providing the best services to our customers and hence we would like you to complete a small survey.</p>
-                <p style="color: red;font-size: 14px;padding-bottom: 20px;">* Required</p>
+                <p style="color: red;font-size: 14px;">* Required</p>
         </div>
         
         <!-- {% include "forms/inputText.html" %} -->
         <!-- Enter some text: <input type="text" name="txt" value="Hello" onchange="myFunction(this.value)"> -->
+        <div class="row card" style="margin-top: 20px;padding: 15px 20px;">
+            
+            <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">Enter Your Email <span style="color: red;margin-left: 0px;">*</span></p>
+            <div class="form-group"  style="width: 80%;"> 
+                <input type="email" name="0"  id="0" onchange='getEmail(this)' required   style="padding-bottom: 20px;" placeholder="your answer"> <br>
+            </div> 
+        </div>
         <form action="" method="post">
             {% csrf_token %} 
         {% for question in questions %}
             
         {% if question.question_type == 0 %}
-            <div class="row card" style="margin-top: 15px;padding: 30px 20px;">
+            <div class="row card" style="margin-top: 20px;padding: 30px 20px;">
+                {% if question.required %}
                 <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}} <span style="color: red;margin-left: 0px;">*</span></p>
+                {% else %}
+                <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}} </p>
+                {% endif %}
                    {%for choice in question.choices.all%}
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="{{question.question_id}}" onclick="handleClick(this);" value="{{choice.choice_name}}" id="{{choice.choice_name}}">
@@ -105,16 +119,28 @@
             </div>
         {%endif%}
         {% if question.question_type == 3 %}
-                <div class="row card" style="margin-top: 15px;padding: 15px 20px;">
-                    <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}}</p>
+                <div class="row card" style="margin-top: 20px;padding: 15px 20px;">
+                    {% if question.required %}
+                    <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}} <span style="color: red;margin-left: 0px;">*</span></p>
+                    <div class="form-group"  style="width: 80%;"> 
+                        <input type="text" name="{{question.question_id}}" id="{{question.question_id}}" onchange='getAnswer(this)' required   style="padding-bottom: 20px;" placeholder="your answer"> <br>
+                    </div>
+                    {% else %}
+                    <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}} </p>
                     <div class="form-group"  style="width: 80%;"> 
                         <input type="text" name="{{question.question_id}}" id="{{question.question_id}}" onchange='getAnswer(this)'   style="padding-bottom: 20px;" placeholder="your answer"> <br>
                     </div>
+                    {% endif %}
+                    
                 </div>
         {%endif%}
         {% if question.question_type == 1 %}
-                <div class="row card" style="margin-top: 15px;padding: 15px 20px;">
-                    <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}}</p>
+                <div class="row card" style="margin-top: 20px;padding: 15px 20px;">
+                 {% if question.required %}
+                <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}} <span style="color: red;margin-left: 0px;">*</span></p>
+                {% else %}
+                <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}} </p>
+                {% endif %}
                     {%for choice in question.choices.all%}
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="{{question.question_id}}" onclick="handleClick(this);" value="{{choice.choice_name}}" id="{{choice.choice_name}}">
@@ -124,8 +150,12 @@
                 </div>
         {%endif%}
         {% if question.question_type == 2 %}
-            <div class="row card" style="margin-top: 15px;padding: 15px 20px;">
-                <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}}</p>
+            <div class="row card" style="margin-top: 20px;padding: 15px 20px;">
+                {% if question.required %}
+                <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}} <span style="color: red;margin-left: 0px;">*</span></p>
+                {% else %}
+                <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">{{question.qusetion_name}} </p>
+                {% endif %}
                 
                 <table style="margin-top: 15px;">
                     <tr>
@@ -189,12 +219,24 @@
 <script>
 
     answer_list=[];
+    emailval;
+    document.getElementById("email").onchange = function(){getEmail()}
+    function getEmail(val){
+        console.log(val.value)
+        emailval=val.value;
+    }
+
      function handleClick(myRadio) {
       answers={
         id:'',
-        answer:''
-    };
+        answer:'',
         
+    };
+        const idboolean = answer_list.some(ans => ans.id === myRadio.name);
+        if(idboolean===true){
+           answer_list.splice(answer_list.findIndex(ans=>ans.id===myRadio.name),1)
+     
+        }
         answers.id=myRadio.name
         answers.answer=myRadio.id
         answer_list.push(answers)
@@ -205,9 +247,14 @@
     function getAnswer(y) {
         console.log(y.value)
         console.log(y.name)
+        if(y.name===0){
+            emailval=y.value
+            console.log(emailval)
+        }
         answers={
         id:'',
-        answer:''
+        answer:'',
+
     };
         
         answers.id=y.name
@@ -218,11 +265,13 @@
      function FormSubmit(){
         console.log('hello')
         var URL="{% url 'FeedbackView' %}"
-            var data = {'answers':answer_list};
+            var data = {'answers':answer_list,'email':emailval};
             console.log(data);
-            $.post(URL, JSON.stringify(data));
-
-
+            $.post(URL, JSON.stringify(data)).then(res=>console.log(res));
+            if(answers!=null){
+            var url = "{% url 'Response' %}";
+                window.location=url
+            }
     }
 </script>
 
