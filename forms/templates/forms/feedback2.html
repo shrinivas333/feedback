@@ -217,7 +217,14 @@
 <!-- end of container -->
 
 <script>
-
+      const queryString = window.location.search;
+console.log(queryString)
+const urlParams = new URLSearchParams(queryString);
+var formid='';
+if(urlParams.has('form')){
+var formid=urlParams.get('form');
+console.log(formid)
+}
     answer_list=[];
     emailval;
     document.getElementById("email").onchange = function(){getEmail()}
@@ -265,7 +272,7 @@
      function FormSubmit(){
         console.log('hello')
         var URL="{% url 'FeedbackView' %}"
-            var data = {'answers':answer_list,'email':emailval};
+            var data = {'answers':answer_list,'email':emailval,'id':formid};
             console.log(data);
             $.post(URL, JSON.stringify(data)).then(res=>console.log(res));
             if(answers!=null){
