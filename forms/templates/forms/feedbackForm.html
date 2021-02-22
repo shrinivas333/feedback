@@ -21,6 +21,14 @@
             padding: 10px 20px;
             border-radius: 10px;
         }
+        input {
+             outline: 0;
+             border-width: 0 0 2px;
+            border-color:#bebdbd; 
+        }
+        input:focus {
+        border-color: #bebdbd
+        }
         input[type="text"],
             select.form-control {
             background: transparent;
@@ -86,7 +94,13 @@
                 <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">Thank you for using GoldLane. We are committed in providing the best services to our customers and hence we would like you to complete a small survey.</p>
                 <p style="color: red;font-size: 14px;padding-bottom: 20px;">* Required</p>
         </div>
-        
+        <div class="row card" style="margin-top: 20px;padding: 15px 20px;">
+            
+            <p style="padding-right: 40px;color: #3B325F;font-size: 16px;">Enter Your Email <span style="color: red;margin-left: 0px;">*</span></p>
+            <div class="form-group"  style="width: 80%;"> 
+                <input type="email" name="0"  id="0" onchange='getEmail(this)' required   style="padding-bottom: 20px;" placeholder="your answer"> <br>
+            </div> 
+        </div>
         <!-- {% include "forms/inputText.html" %} -->
         <!-- Enter some text: <input type="text" name="txt" value="Hello" onchange="myFunction(this.value)"> -->
         <form action="" method="post">
@@ -187,43 +201,69 @@
 <!-- end of container -->
 
 <script>
+    const queryString = window.location.search;
+console.log(queryString)
+const urlParams = new URLSearchParams(queryString);
+var formid='';
+if(urlParams.has('form')){
+var formid=urlParams.get('form');
+console.log(formid)
+}
+  answer_list=[];
+  emailval;
+  document.getElementById("email").onchange = function(){getEmail()}
+  function getEmail(val){
+      console.log(val.value)
+      emailval=val.value;
+  }
 
-    answer_list=[];
-     function handleClick(myRadio) {
+   function handleClick(myRadio) {
+    answers={
+      id:'',
+      answer:'',
+      
+  };
+      const idboolean = answer_list.some(ans => ans.id === myRadio.name);
+      if(idboolean===true){
+         answer_list.splice(answer_list.findIndex(ans=>ans.id===myRadio.name),1)
+   
+      }
+      answers.id=myRadio.name
+      answers.answer=myRadio.id
+      answer_list.push(answers)
+      console.log(answer_list);
+          
+  }
+  document.getElementById("text").onchange = function() {getAnswer()};
+  function getAnswer(y) {
+      console.log(y.value)
+      console.log(y.name)
+      if(y.name===0){
+          emailval=y.value
+          console.log(emailval)
+      }
       answers={
-        id:'',
-        answer:''
-    };
-        
-        answers.id=myRadio.name
-        answers.answer=myRadio.id
-        answer_list.push(answers)
-        console.log(answer_list);
-            
-    }
-    document.getElementById("text").onchange = function() {getAnswer()};
-    function getAnswer(y) {
-        console.log(y.value)
-        console.log(y.name)
-        answers={
-        id:'',
-        answer:''
-    };
-        
-        answers.id=y.name
-        answers.answer=y.value
-        answer_list.push(answers)
-        console.log(answer_list);
-    }
-     function FormSubmit(){
-        console.log('hello')
-        var URL="{% url 'FeedbackView' %}"
-            var data = {'answers':answer_list};
-            console.log(data);
-            $.post(URL, JSON.stringify(data));
+      id:'',
+      answer:'',
 
-
-    }
+  };
+      
+      answers.id=y.name
+      answers.answer=y.value
+      answer_list.push(answers)
+      console.log(answer_list);
+  }
+   function FormSubmit(){
+      console.log('hello')
+      var URL="{% url 'FeedbackView' %}"
+          var data = {'answers':answer_list,'email':emailval,'id':formid};
+          console.log(data);
+          $.post(URL, JSON.stringify(data)).then(res=>console.log(res));
+          if(answers!=null){
+          var url = "{% url 'Response' %}";
+              window.location=url
+          }
+  }
 </script>
 
 
